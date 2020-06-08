@@ -308,6 +308,7 @@ namespace Bono.App_Code
 
         public double Tir(double[] flujoBonista) {
             double tir = Financial.IRR(flujoBonista,0.1);
+            /*NO acepta la clase financial*/
             return 0;
         }
 
