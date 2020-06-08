@@ -8,4 +8,5 @@ tech:
 - code first (for dev sql server connection)
 
 Calc:
-- file: App_code formulas y funciones del calculo del flujo y el bono (Buscando libreria C# para operaciones financieras la clase FINANCIAL de VB no la reconoce la solucion)
+- file: formulas y funciones del calculo del flujo y el bono, se uso la libreria Excel.FinancialFunctions para el calculo de la tir.
+
