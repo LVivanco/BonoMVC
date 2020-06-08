@@ -1,5 +1,5 @@
-﻿using Microsoft.VisualBasic;
-using System;
+﻿using System;
+using Excel.FinancialFunctions;
 
 namespace Bono.App_Code
 {
@@ -154,7 +154,6 @@ namespace Bono.App_Code
                                 cuota = cupon;
                                 break;
                             case 'S':
-                                /*vn*((((1+tep)^ntp)*tep)/(((1+tep)^ntp)-1))*(-1)*/
                                 cuota = (valorNominal * (((Math.Pow(1 + tep, numeroPeriodos) * tep) / (Math.Pow(1 + tep, numeroPeriodos) - 1)))) * -1;
                                 break;
                             default:
@@ -212,14 +211,16 @@ namespace Bono.App_Code
                         }
                         else
                         {
-                            amortizacion = cuota-cupon;
+                            amortizacion = cuota - cupon;
                         }
                         break;
                     case "americano":
-                        if (n == numeroPeriodos) {
+                        if (n == numeroPeriodos)
+                        {
                             amortizacion = bonoIndexado * -1;
                         }
-                        else {
+                        else
+                        {
                             amortizacion = 0;
                         }
                         break;
@@ -235,18 +236,22 @@ namespace Bono.App_Code
             return amortizacion;
         }
 
-        public double Prima(int n, int numeroPeriodos, double pPrima, double bonoIndexado) {
+        public double Prima(int n, int numeroPeriodos, double pPrima, double bonoIndexado)
+        {
             double prima;
-            if (n == numeroPeriodos) {
+            if (n == numeroPeriodos)
+            {
                 prima = pPrima * bonoIndexado * -1;
             }
-            else {
+            else
+            {
                 prima = 0;
             }
             return prima;
         }
 
-        public double Escudo(double cupon, double ir) {
+        public double Escudo(double cupon, double ir)
+        {
             double escudo;
 
             escudo = (cupon * -1) * ir;
@@ -254,66 +259,81 @@ namespace Bono.App_Code
             return escudo;
         }
 
-        public double FlujoEmisor(int n, int numeroPeriodos, double valorComercial, double costoInicialEmisor, double cuota, double prima) {
+        public double FlujoEmisor(int n, int numeroPeriodos, double valorComercial, double costoInicialEmisor, double cuota, double prima)
+        {
             double flujoEmisor;
-            if (n == 0) {
+            if (n == 0)
+            {
                 flujoEmisor = valorComercial - costoInicialEmisor;
             }
-            else {
-                if (n <= numeroPeriodos) {
+            else
+            {
+                if (n <= numeroPeriodos)
+                {
                     flujoEmisor = cuota + prima;
                 }
-                else {
+                else
+                {
                     flujoEmisor = 0;
                 }
             }
             return flujoEmisor;
         }
 
-        public double FlujoEmisorEscudo(int n, double flujoEmisor, double escudo ) {
+        public double FlujoEmisorEscudo(int n, double flujoEmisor, double escudo)
+        {
             double flujoEmisorEscudo;
-            if (n == 0) {
+            if (n == 0)
+            {
                 flujoEmisorEscudo = flujoEmisor;
             }
-            else {
+            else
+            {
                 flujoEmisorEscudo = flujoEmisor + escudo;
             }
             return flujoEmisorEscudo;
         }
 
-        public double FlujoBonista(int n, double valorComercial, double costoInicialBonista, double flujoEmisor) {
+        public double FlujoBonista(int n, double valorComercial, double costoInicialBonista, double flujoEmisor)
+        {
             double flujoBonista;
-            if (n == 0) {
+            if (n == 0)
+            {
                 flujoBonista = (valorComercial * -1) - costoInicialBonista;
             }
-            else {
+            else
+            {
                 flujoBonista = flujoEmisor * -1;
             }
             return flujoBonista;
         }
 
-        public double ValorActual(double[] flujoBonista, double tasaDescuentoAnual, int numeroPeriodos) {
+        public double ValorActual(double[] flujoBonista, double tasaDescuentoAnual, int numeroPeriodos)
+        {
             double valorActual = 0;
-            for (int i = 1; i<= numeroPeriodos; i++) {
+            for (int i = 1; i <= numeroPeriodos; i++)
+            {
                 valorActual = valorActual + ((flujoBonista[i]) / Math.Pow(i + tasaDescuentoAnual, i));
             }
             return valorActual;
         }
 
-        public double VANeto(double[] flujoBonista, double valorActual) {
+        public double VANeto(double[] flujoBonista, double valorActual)
+        {
             double valorActualNeto;
             valorActualNeto = flujoBonista[0] + valorActual;
             return valorActualNeto;
         }
 
-        public double Tir(double[] flujoBonista) {
-            double tir = Financial.IRR(flujoBonista,0.1);
-            /*NO acepta la clase financial*/
-            return 0;
+        public double Tir(double[] flujoBonista)
+        {
+            double tir = Financial.Irr(flujoBonista,0.1);
+            return tir;
         }
 
-        public double Tcea(double tir, double diasAnio, double diasPeriodo) {
-            double tcea = Math.Pow(1+tir,diasAnio/diasPeriodo)-1;
+        public double Tcea(double tir, double diasAnio, double diasPeriodo)
+        {
+            double tcea = Math.Pow(1 + tir, diasAnio / diasPeriodo) - 1;
             return tcea;
         }
 
